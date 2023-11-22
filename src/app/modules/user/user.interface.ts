@@ -1,5 +1,7 @@
 /*         Define all the necessary user interface        */
 
+import { Model } from "mongoose";
+
 
 export interface IUserFullName {
     firstName:string;
@@ -32,5 +34,7 @@ export interface IUser {
     isActive:boolean;
     hobbies:string[];
     address:IUserAddress;
-    orders?:IUserOrders;
+    orders?:IUserOrders[];
 }
+
+export type IUserModel = Model<IUser>
