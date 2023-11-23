@@ -36,6 +36,9 @@ router.put('/api/users/:userId/orders',userController.createSpecificUserOrders)
 router.get('/api/users/:userId/orders', userController.getSpecificUserOrders)
 
 
+/* retrieve specific user orders  route */
+router.get('/api/users/:userId/orders/total-price',userController.getTotalOrdersValues)
+
 
 
 export const userRoutes = router;

@@ -28,7 +28,6 @@ const updateSpecificUserFromDB = async (userId: string, data: any) => {
   return result
 }
 
-
 const createUserOrdersIntoDB = async (userId: string, data: IUserOrders) => {
   const user = await UserModel.findOne({ userId })
   if (!user?.orders) user?.set('orders', [])
@@ -37,14 +36,20 @@ const createUserOrdersIntoDB = async (userId: string, data: IUserOrders) => {
   return result
 }
 
+const getSpecificUserOrdersFromDB = async (userId: string) => {
+  const result = await UserModel.findOne({ userId }, { orders: 1, _id: 0 })
+  return result
+}
 
+// TODO : we will fixed it later ID Problem
 
-const getSpecificUserOrdersFromDB = async (userId:string) => {
- const user = await UserModel.findOne({userId})
+const getTotalOrdersValuesFromDB = async (userId: string) => {
+  const result = await UserModel.findOne(
+    { userId: parseInt(userId) },
+    { _id: 0, totalValues: { $sum: '$orders.price' } },
+  )
 
- const result = user?.orders
- return result;
-
+  return result
 }
 
 export const userServices = {
@@ -54,5 +59,6 @@ export const userServices = {
   deleteSpecificUserFromDB,
   updateSpecificUserFromDB,
   createUserOrdersIntoDB,
-  getSpecificUserOrdersFromDB
+  getSpecificUserOrdersFromDB,
+  getTotalOrdersValuesFromDB,
 }

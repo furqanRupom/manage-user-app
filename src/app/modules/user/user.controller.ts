@@ -152,7 +152,7 @@ const createSpecificUserOrders = async (req: Request, res: Response) => {
 
 const getSpecificUserOrders = async (req:Request,res:Response) => {
 try {
-  const {userId} = req.params
+  const {userId } = req.params
   const result = await userServices.getSpecificUserOrdersFromDB(userId)
   if(!result){
     res.status(500).json({
@@ -184,6 +184,31 @@ try {
 }
 
 
+const getTotalOrdersValues = async (req:Request,res:Response) => {
+  try {
+    const {userId} = req.params;
+    const result = await userServices.getTotalOrdersValuesFromDB(userId)
+      res.status(200).json({
+        success: true,
+        message: 'get total values successfully',
+        data: result,
+      })
+
+
+
+  } catch (error:any) {
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+      error: {
+        code: 500,
+        description: 'Unfortunately,cannot get orders data',
+        error:error.message
+      },
+    })
+  }
+}
+
 
 
 
@@ -195,5 +220,6 @@ export const userController = {
   deleteSpecificUser,
   updateSpecificUser,
   createSpecificUserOrders,
-  getSpecificUserOrders
+  getSpecificUserOrders,
+  getTotalOrdersValues
 }
