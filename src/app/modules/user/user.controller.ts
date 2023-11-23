@@ -74,8 +74,34 @@ const getSpecificUser = async (req: Request, res: Response) => {
   }
 }
 
+
+const deleteSpecificUser = async (req:Request,res:Response) => {
+ try {
+
+  const {userId} = req.params;
+  const result = await userServices.deleteSpecificUserFromDB(userId)
+  res.status(200).json({
+    success: true,
+    message: 'Delete specific user successfully',
+    data: result,
+  })
+  
+
+ } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+      error: {
+        code: 500,
+        description: 'Unfortunately, cannot delete this following user',
+      },
+    })
+ }
+}
+
 export const userController = {
   createUser,
   getAllUsers,
-  getSpecificUser
+  getSpecificUser,
+  deleteSpecificUser
 }
