@@ -56,7 +56,6 @@ const getAllUsers = async (req: Request, res: Response) => {
 const getSpecificUser = async (req: Request, res: Response) => {
   try {
     const {userId} = req.params;
-    console.log(userId)
     const result = await userServices.getSpecificUserFromDB(userId)
     res.status(200).json({
       success: true,
@@ -151,6 +150,41 @@ const createSpecificUserOrders = async (req: Request, res: Response) => {
 }
 
 
+const getSpecificUserOrders = async (req:Request,res:Response) => {
+try {
+  const {userId} = req.params
+  const result = await userServices.getSpecificUserOrdersFromDB(userId)
+  if(!result){
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+      error: {
+        code: 500,
+        description: 'Unfortunately,cannot get orders data',
+      },
+    })
+  }
+  res.status(200).json({
+    success: true,
+    message: 'get specific user orders successfully',
+    data: result,
+  })
+
+
+} catch (error) {
+ res.status(500).json({
+   success: false,
+   message: 'Something went wrong',
+   error: {
+     code: 500,
+     description: 'Unfortunately,cannot get orders data',
+   },
+ })
+}
+}
+
+
+
 
 
 
@@ -160,5 +194,6 @@ export const userController = {
   getSpecificUser,
   deleteSpecificUser,
   updateSpecificUser,
-  createSpecificUserOrders
+  createSpecificUserOrders,
+  getSpecificUserOrders
 }

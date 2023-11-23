@@ -30,14 +30,22 @@ const updateSpecificUserFromDB = async (userId: string, data: any) => {
 
 
 const createUserOrdersIntoDB = async (userId: string, data: IUserOrders) => {
-  const getUser = await UserModel.findOne({ userId })
-  if (!getUser?.orders) getUser?.set('orders', [])
-  if (getUser) getUser?.orders?.push(data)
-  const result = getUser?.save()
+  const user = await UserModel.findOne({ userId })
+  if (!user?.orders) user?.set('orders', [])
+  if (user) user?.orders?.push(data)
+  const result = user?.save()
   return result
 }
 
 
+
+const getSpecificUserOrdersFromDB = async (userId:string) => {
+ const user = await UserModel.findOne({userId})
+
+ const result = user?.orders
+ return result;
+
+}
 
 export const userServices = {
   createUserIntoDB,
@@ -46,4 +54,5 @@ export const userServices = {
   deleteSpecificUserFromDB,
   updateSpecificUserFromDB,
   createUserOrdersIntoDB,
+  getSpecificUserOrdersFromDB
 }

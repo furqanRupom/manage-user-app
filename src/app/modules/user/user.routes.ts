@@ -31,6 +31,11 @@ router.put('/api/users/:userId',userController.updateSpecificUser);
 router.put('/api/users/:userId/orders',userController.createSpecificUserOrders)
 
 
+/* retrieve specific user orders  route */
+
+router.get('/api/users/:userId/orders', userController.getSpecificUserOrders)
+
+
 
 
 export const userRoutes = router;
