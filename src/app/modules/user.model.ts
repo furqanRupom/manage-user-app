@@ -20,26 +20,27 @@ const UserOrdersSchema = new Schema<IUserOrders>({
   quantity: { type: Number, required: true },
 })
 
-const UserSchema = new Schema<IUser>({
-  userId: { type: Number, required: true },
-  username: { type: String, required: true },
-  password: { type: String,required:[true,'password is required'] },
-  fullName: { type: UserFullNameSchema, required: true },
-  age: { type: Number, required: true },
-  email: { type: String, required: true },
-  isActive: { type: Boolean, required: true },
-  hobbies: { type: [String], required: true },
-  address: { type: UserAddressSchema, required: true },
-  orders:{type:[UserOrdersSchema],required:false}
-},
-{
-  toJSON:{
-    transform:function(doc,user){
-      delete user.password
-      return user;
-    }
-  }
-}
+const UserSchema = new Schema<IUser>(
+  {
+    userId: { type: Number, required: true },
+    username: { type: String, required: true },
+    password: { type: String, required: [true, 'password is required'] },
+    fullName: { type: UserFullNameSchema, required: true },
+    age: { type: Number, required: true },
+    email: { type: String, required: true },
+    isActive: { type: Boolean, required: true },
+    hobbies: { type: [String], required: true },
+    address: { type: UserAddressSchema, required: true },
+    orders: { type: [UserOrdersSchema], default: undefined },
+  },
+  {
+    toJSON: {
+      transform: function (doc, user) {
+        delete user.password
+        return user
+      },
+    },
+  },
 )
 
 

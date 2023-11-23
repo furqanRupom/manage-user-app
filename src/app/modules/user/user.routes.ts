@@ -26,5 +26,11 @@ router.delete('/api/users/:userId',userController.deleteSpecificUser);
 router.put('/api/users/:userId',userController.updateSpecificUser);
 
 
+/* create specific user orders  route */
+
+router.put('/api/users/:userId/orders',userController.createSpecificUserOrders)
+
+
+
 
 export const userRoutes = router;

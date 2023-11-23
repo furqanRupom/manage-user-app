@@ -126,6 +126,32 @@ const updateSpecificUser = async (req:Request,res:Response) => {
 }
 
 
+/*  create orders data for specific user controller   */
+
+const createSpecificUserOrders = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params
+    const data = req.body
+    const result = await userServices.createUserOrdersIntoDB(userId, data)
+    res.status(200).json({
+      success: true,
+      message: 'create specific user orders successfully',
+      data: result?.orders,
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+      error: {
+        code: 500,
+        description: 'Unfortunately,cannot update this following user',
+      },
+    })
+  }
+}
+
+
+
 
 
 export const userController = {
@@ -133,5 +159,6 @@ export const userController = {
   getAllUsers,
   getSpecificUser,
   deleteSpecificUser,
-  updateSpecificUser
+  updateSpecificUser,
+  createSpecificUserOrders
 }
