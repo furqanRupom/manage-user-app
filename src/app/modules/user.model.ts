@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { IUser, IUserAddress, IUserFullName, IUserOrders } from './user/user.interface';
+import { IUser, IUserAddress, IUserFullName, IUserModel, IUserOrders } from './user/user.interface';
 import bcrypt from "bcryptjs"
 import config from '../config';
 
@@ -20,10 +20,10 @@ const UserOrdersSchema = new Schema<IUserOrders>({
   quantity: { type: Number, required: true },
 })
 
-const UserSchema = new Schema<IUser>(
+const UserSchema = new Schema<IUser,IUserModel>(
   {
-    userId: { type: Number, required: true },
-    username: { type: String, required: true },
+    userId: { type: Number, required: true,unique:true },
+    username: { type: String, required: true,unique:true },
     password: { type: String, required: [true, 'password is required'] },
     fullName: { type: UserFullNameSchema, required: true },
     age: { type: Number, required: true },
@@ -49,7 +49,6 @@ const UserSchema = new Schema<IUser>(
 
 /*  make hashedPassword before saving new user document  */
 
-
 UserSchema.pre('save',async function(next){
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this
@@ -59,14 +58,19 @@ UserSchema.pre('save',async function(next){
 })
 
 
+/* Custom static method to check if a user with a specific ID exists. */
 
+UserSchema.statics.isUserExits = async (userId: string) => {
+  const existingStudent = await UserModel.findOne({ userId })
+  return existingStudent
+}
 
 
 
 
 // Create a Mongoose model based on the schema
 
-export const UserModel = model<IUser>('User', UserSchema)
+export const UserModel = model<IUser,IUserModel>('User', UserSchema)
 
 
 

@@ -37,4 +37,6 @@ export interface IUser {
     orders?:IUserOrders[];
 }
 
-export type IUserModel = Model<IUser>
+export interface IUserModel extends Model<IUser> {
+  isUserExits(userId: number): Promise<IUser | null>
+}
