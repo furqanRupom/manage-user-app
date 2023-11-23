@@ -50,6 +50,7 @@ const getAllUsers = async (req: Request, res: Response) => {
 }
 
 
+/*  retrieve  specific user controller   */
 
 
 const getSpecificUser = async (req: Request, res: Response) => {
@@ -75,9 +76,10 @@ const getSpecificUser = async (req: Request, res: Response) => {
 }
 
 
+/*  delete  specific user controller   */
+
 const deleteSpecificUser = async (req:Request,res:Response) => {
  try {
-
   const {userId} = req.params;
   const result = await userServices.deleteSpecificUserFromDB(userId)
   res.status(200).json({
@@ -85,7 +87,7 @@ const deleteSpecificUser = async (req:Request,res:Response) => {
     message: 'Delete specific user successfully',
     data: result,
   })
-  
+
 
  } catch (error) {
     res.status(500).json({
@@ -99,9 +101,37 @@ const deleteSpecificUser = async (req:Request,res:Response) => {
  }
 }
 
+/*  update  specific user controller   */
+
+const updateSpecificUser = async (req:Request,res:Response) => {
+ try {
+   const { userId } = req.params
+   const data = req.body
+   const result = await userServices.updateSpecificUserFromDB(userId,data)
+   res.status(200).json({
+     success: true,
+     message: 'Update specific user successfully',
+     data: result,
+   })
+ } catch (error) {
+   res.status(500).json({
+     success: false,
+     message: 'Something went wrong',
+     error: {
+       code: 500,
+       description: 'Unfortunately,cannot update this following user',
+     },
+   })
+ }
+}
+
+
+
+
 export const userController = {
   createUser,
   getAllUsers,
   getSpecificUser,
-  deleteSpecificUser
+  deleteSpecificUser,
+  updateSpecificUser
 }

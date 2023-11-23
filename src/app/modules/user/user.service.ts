@@ -27,9 +27,17 @@ const deleteSpecificUserFromDB = async (userId:string) => {
 }
 
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const updateSpecificUserFromDB = async (userId:string,data:any) => {
+      const result = await UserModel.findOneAndUpdate({userId},data)
+      return result;
+}
+
+
 export const userServices = {
     createUserIntoDB,
     getUsersFromDB,
     getSpecificUserFromDB,
-    deleteSpecificUserFromDB
+    deleteSpecificUserFromDB,
+    updateSpecificUserFromDB
 }

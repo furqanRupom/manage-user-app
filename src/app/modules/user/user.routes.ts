@@ -21,5 +21,10 @@ router.get('/api/users/:userId',userController.getSpecificUser);
 router.delete('/api/users/:userId',userController.deleteSpecificUser);
 
 
+/* update specific user  route */
+
+router.put('/api/users/:userId',userController.updateSpecificUser);
+
+
 
 export const userRoutes = router;
