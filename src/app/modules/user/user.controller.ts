@@ -24,7 +24,6 @@ const createUser = async (req:Request,res:Response) => {
          error: {
            code: 500,
            description: 'Unfortunately, user creation failed',
-           error:error.message
          },
        })
     }
@@ -33,6 +32,35 @@ const createUser = async (req:Request,res:Response) => {
 
 
 
+/*  retrieve all the users controller   */
+
+const getAllUsers = async (req:Request,res:Response) => {
+        try {
+          const result = await userServices.getUsersFromDB()
+          res.status(200).json({
+            success: true,
+            message: 'Get all the users successfully',
+            data: result,
+          })
+        } catch (error: any) {
+          res.status(500).json({
+            success: false,
+            message: 'Something went wrong',
+            error: {
+              code: 500,
+              description: 'Unfortunately, cannot find any user',
+            },
+          })
+        }
+}
+
+
+
+
+
+
+
 export const userController = {
-    createUser
+    createUser,
+    getAllUsers
 }
