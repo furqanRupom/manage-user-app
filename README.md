@@ -31,7 +31,7 @@ Make sure you have the following installed on your machine:
 
 1. **Clone the Repository:**
     ```bash
-     cd (https://github.com/furqanRupom/manage-user-app.git)
+    git clone https://github.com/furqanRupom/manage-user-app.git
     ```
     This command clones the project repository to your local machine and navigates into the project directory.
 
