@@ -31,40 +31,47 @@ Make sure you have the following installed on your machine:
 
 1. **Clone the Repository:**
     ```bash
-    git clone https://github.com/your-username/user-management-app.git
-    cd user-management-app
+   [ git clone https://github.com/your-username/user-management-app.git
+    cd user-management-app](https://github.com/furqanRupom/manage-user-app.git)
     ```
     This command clones the project repository to your local machine and navigates into the project directory.
 
 2. **Install Dependencies:**
     ```bash
-    npm install
+    yarn 
     ```
     This command installs the necessary Node.js packages and dependencies required for the application to run.
 
 3. **Configure Environment Variables:**
-    Create a `.env` file in the root directory and add the necessary environment variables. You can use the provided `.env.example` as a template.
+    Create a `.env` file in the root directory and add the necessary environment variables. You can use the provided `.env.local` as a template.
 
 4. **Start the Application:**
     ```bash
-    npm start
+    yarn start
     ```
-    This command starts the application. After this step, you can access the app locally at [http://localhost:3000](http://localhost:3000).
+    This command starts the application. After this step, you can access the app locally at [http://localhost:5000](http://localhost:5000).
+   NOTE: you have to set the port number to 5000.
 
-5. **Access the App:**
-    The app is now running at [http://localhost:3000](http://localhost:3000). You can explore the API routes and interact with the application.
+6. **Access the App:**
+    The app is now running at [http://localhost:5000](http://localhost:5000). You can explore the API routes and interact with the application.
 
-## API Routes
+
+##Features
+
+### API Routes
 
 - **Create User:**
     ```http
     POST /api/users
     ```
+    * You can create a user with this following routes with the provided data.
+      
 
 - **Retrieve All Users:**
     ```http
     GET /api/users
     ```
+    * You can retrieve the all the users with this following routes.
 
 - **Retrieve Specific User:**
     ```http
