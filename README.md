@@ -111,4 +111,4 @@ Make sure you have the following installed on your machine which can mac/linux o
     ```
     * you can   calculate the total cost of products for specific users wit this routes.
 
-Explore freely this app and use all routes as need it . And you get any bugs or problem don't hesitate to reach out!
+Explore freely this app and use all routes as need it . And if you get any bugs or problem don't hesitate to reach out!
