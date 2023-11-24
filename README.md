@@ -4,9 +4,9 @@
 Welcome to our User Management App! This application is built using Express, TypeScript, and Mongoose. It provides a set of API routes for managing users and their orders, utilizing Zod for validation. Whether you're a developer looking to contribute or a user interested in setting up the project locally, we've got you covered!
 
 ## Contributing
-We value your contributions! Here's how you can get involved:
+We value your contributions! Heres how can you get space to contriubtes :
 
-- **Report Issues:** Encountered a bug or have a suggestion? Open an issue and let us know the details.
+- **Report Issues:** If you get any bugs dot hasited to or shy to report it.
 - **Contribute Code:** Developers, you can contribute by following the steps below:
     1. Fork this repository
     2. Clone the forked repository
@@ -14,14 +14,14 @@ We value your contributions! Here's how you can get involved:
     4. Commit and push
     5. Submit a pull request
 
-- **Suggestions:** If you have non-code related ideas, open an issue to discuss updates or improvements.
+- **Suggestions:** If you any suggesstions or code issues you can provide it
 
-- **Documentation:** Feel free to enhance the documentation if you identify areas that need improvement.
+- **Documentation:** Feel free to suggest the documentation if you get or identify areas that need improvement.
 
 ## Installation
 
 ### Prerequisites
-Make sure you have the following installed on your machine:
+Make sure you have the following installed on your machine which can mac/linux or windows:
 
 - Node.js
 - npm (Node Package Manager)
@@ -76,30 +76,39 @@ Make sure you have the following installed on your machine:
     ```http
     GET /api/users/:userId
     ```
+    * you can get specific user by sending response with this following routes
 
 - **Update Specific User:**
     ```http
     PUT /api/users/:userId
     ```
 
+    * you can update the specific user with this routes
+
+
 - **Delete Specific User:**
     ```http
     DELETE /api/users/:userId
     ```
+    * you can delete the specific user with this routes
 
 - **Create Specific User Orders:**
     ```http
     PUT /api/users/:userId/orders
     ```
 
+    * you can create a product orders list by using this routes
+
 - **Retrieve Specific User Orders:**
     ```http
     GET /api/users/:userId/orders
     ```
-
+ * you can retrieve all the products orders list by using routes
+ * 
 - **Retrieve Specific User Orders Total Price:**
     ```http
     GET /api/users/:userId/orders/total-price
     ```
+    * you can   calculate the total cost of products for specific users wit this routes.
 
-Feel free to explore and use these routes as needed. If you have any questions or run into issues, don't hesitate to reach out!
+Explore freely this app and use all routes as need it . And you get any bugs or problem don't hesitate to reach out!
