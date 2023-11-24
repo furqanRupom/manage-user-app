@@ -21,7 +21,7 @@ We value your contributions! Heres how can you get space to contriubtes :
 ## Installation
 
 ### Prerequisites
-Make sure you have the following installed on your machine which can mac/linux or windows:
+Make sure you have the following installed on your machine which can be mac/linux or windows:
 
 - Node.js
 - npm (Node Package Manager)
