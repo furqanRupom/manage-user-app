@@ -19,10 +19,16 @@ const createUser = async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(error.status || 500).json({
       success: false,
-      message: error.message || 'Something went wrong',
+      message:
+        error.message || error.issues
+          ? `${error.issues[0].path[0]} : ${error.issues[0].message} `
+          : 'Something went wrong',
       error: {
         code: error.status || 500,
-        description: error.message || 'Unfortunately, user creation failed',
+        description:
+          error.message || error.issues ?
+            `${error.issues[0].path[0]} : ${error.issues[0].message} `
+            : 'Unfortunately, user creation failed',
       },
     })
   }
