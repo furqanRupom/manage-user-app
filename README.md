@@ -6,7 +6,7 @@ Welcome to our User Management App! This application is built using Express, Typ
 ## Contributing
 We value your contributions! Heres how can you get space to contriubtes :
 
-- **Report Issues:** If you get any bugs dot hasited to or shy to report it.
+- **Report Issues:** If you get any bugs don't hasited to or shy to report it.
 - **Contribute Code:** Developers, you can contribute by following the steps below:
     1. Fork this repository
     2. Clone the forked repository
