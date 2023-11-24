@@ -31,8 +31,7 @@ Make sure you have the following installed on your machine:
 
 1. **Clone the Repository:**
     ```bash
-   [ git clone https://github.com/your-username/user-management-app.git
-    cd user-management-app](https://github.com/furqanRupom/manage-user-app.git)
+     cd (https://github.com/furqanRupom/manage-user-app.git)
     ```
     This command clones the project repository to your local machine and navigates into the project directory.
 
