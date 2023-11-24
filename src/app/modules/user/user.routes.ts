@@ -16,14 +16,13 @@ router.get('/api/users',userController.getAllUsers);
 
 router.get('/api/users/:userId',userController.getSpecificUser);
 
-/* delete specific user  route */
-
-router.delete('/api/users/:userId',userController.deleteSpecificUser);
-
-
 /* update specific user  route */
 
 router.put('/api/users/:userId',userController.updateSpecificUser);
+
+/* delete specific user  route */
+
+router.delete('/api/users/:userId',userController.deleteSpecificUser);
 
 
 /* create specific user orders  route */
@@ -36,7 +35,7 @@ router.put('/api/users/:userId/orders',userController.createSpecificUserOrders)
 router.get('/api/users/:userId/orders', userController.getSpecificUserOrders)
 
 
-/* retrieve specific user orders  route */
+/* retrieve specific user orders total price route */
 
 router.get('/api/users/:userId/orders/total-price',userController.getTotalOrdersValues)
 

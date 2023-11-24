@@ -1,15 +1,19 @@
 import { UserModel } from '../user.model'
 import { IUser, IUserOrders } from './user.interface'
 
+/* create user  */
+
 const createUserIntoDB = async (userData: IUser) => {
   const isUserExit = await UserModel.isUserExits(userData.userId)
   if (isUserExit) {
-    return { success: false, status: 500, message: 'users already exit' }
+    throw { message: 'users already exit', status: 500 }
   }
   const user = await UserModel.create(userData)
   const result = user.save()
   return result
 }
+
+/* get all users  */
 
 const getUsersFromDB = async () => {
   const result = await UserModel.find().select({
@@ -23,28 +27,33 @@ const getUsersFromDB = async () => {
   return result
 }
 
-const getSpecificUserFromDB = async (userId: string) => {
-  const isUserExit = await UserModel.isUserExits(Number(userId))
+/* create user  */
+
+const getSpecificUserFromDB = async (userId: number) => {
+  const isUserExit = await UserModel.isUserExits(userId)
   if (!isUserExit) {
     throw { message: 'user not found', status: 404 }
   }
   const result = await UserModel.findOne({ userId })
-
   return result
 }
 
-const deleteSpecificUserFromDB = async (userId: string) => {
-  const isUserExit = await UserModel.isUserExits(Number(userId))
+/* delete user  */
+
+const deleteSpecificUserFromDB = async (userId: number) => {
+  const isUserExit = await UserModel.isUserExits(userId)
   if (!isUserExit) {
     throw { message: 'user not found', status: 404 }
   }
-  const result = await UserModel.deleteOne({ userId })
-  return result
+  await UserModel.deleteOne({ userId })
+  return null
 }
 
+/* update user  */
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const updateSpecificUserFromDB = async (userId: string, data: any) => {
-  const isUserExit = await UserModel.isUserExits(Number(userId))
+const updateSpecificUserFromDB = async (userId: number, data: any) => {
+  const isUserExit = await UserModel.isUserExits(userId)
   if (!isUserExit) {
     throw { message: 'user not found', status: 404 }
   }
@@ -52,35 +61,44 @@ const updateSpecificUserFromDB = async (userId: string, data: any) => {
   return result
 }
 
-const createUserOrdersIntoDB = async (userId: string, data: IUserOrders) => {
-  const isUserExit = await UserModel.isUserExits(Number(userId))
+/* create orders  */
+
+const createUserOrdersIntoDB = async (userId: number, data: IUserOrders) => {
+  const isUserExit = await UserModel.isUserExits(userId)
   if (!isUserExit) {
     throw { message: 'user not found', status: 404 }
   }
   const user = await UserModel.findOne({ userId })
   if (!user?.orders) user?.set('orders', [])
   if (user) user?.orders?.push(data)
-  const result = await user?.save()
-  return result
+  await user?.save()
+  return null
 }
 
-const getSpecificUserOrdersFromDB = async (userId: string) => {
-  const isUserExit = await UserModel.isUserExits(Number(userId))
+/* get specific user orders data  */
+
+const getSpecificUserOrdersFromDB = async (userId: number) => {
+  const isUserExit = await UserModel.isUserExits(userId)
   if (!isUserExit) {
-     throw {message:'user not found', status:404}
+    throw { message: 'user not found', status: 404 }
   }
-  const result = await UserModel.findOne({ userId }, { orders: 1, _id: 0 })
+  const result = await UserModel.findOne({ userId }).select({
+    orders: 1,
+    _id: 0,
+  })
   return result
 }
 
-const getTotalOrdersValuesFromDB = async (userId: string) => {
-  const isUserExit = await UserModel.isUserExits(Number(userId))
+/* Calculate the total prices of orders */
+
+const getTotalOrdersValuesFromDB = async (userId: number) => {
+  const isUserExit = await UserModel.isUserExits(userId)
   if (!isUserExit) {
     return { success: false, status: 404, message: 'cannot find the user' }
   }
   const result = await UserModel.findOne(
     { userId },
-    { _id: 0, totalValues: { $sum: '$orders.price' } },
+    { _id: 0, totalPrice: { $sum: '$orders.price' } },
   )
 
   return result

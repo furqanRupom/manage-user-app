@@ -2,7 +2,7 @@
 import { Request, Response } from 'express'
 import { userServices } from './user.service'
 import UserSchemaValidation from './user.validation'
-import { UserModel } from '../user.model'
+
 
 /*  create user controller    */
 
@@ -11,29 +11,18 @@ const createUser = async (req: Request, res: Response) => {
   try {
     const parseUserData = UserSchemaValidation.parse(userData)
     const result = await userServices.createUserIntoDB(parseUserData)
-
-    if (!result) {
-      res.status(500).json({
-        success: false,
-        message: 'Something went wrong',
-        error: {
-          code: 500,
-          description: 'Unfortunately, user creation failed',
-        },
-      })
-    }
     res.status(200).json({
       success: true,
       message: 'user created successfully',
       data: result,
     })
   } catch (error: any) {
-    res.status(500).json({
+    res.status(error.status || 500).json({
       success: false,
-      message: 'Something went wrong',
+      message: error.message || 'Something went wrong',
       error: {
-        code: 500,
-        description: 'Unfortunately, user creation failed',
+        code: error.status || 500,
+        description: error.message || 'Unfortunately, user creation failed',
       },
     })
   }
@@ -44,31 +33,18 @@ const createUser = async (req: Request, res: Response) => {
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const result = await userServices.getUsersFromDB()
-
-    if (!result) {
-      res.status(500).json({
-        success: false,
-        message: 'We encountered an issue while processing your request.',
-        error: {
-          code: 500,
-          description:
-            'Apologies, but we were unable to locate any matching user records.',
-        },
-      })
-    }
-
     res.status(200).json({
       success: true,
-      message: 'Get all the users successfully',
+      message: 'Users fetched successfully!',
       data: result,
     })
   } catch (error: any) {
-    res.status(500).json({
+    res.status(error.status || 500).json({
       success: false,
-      message: 'We encountered an issue while processing your request.',
+      message: error.message || 'We encountered an issue while processing your request.',
       error: {
-        code: 500,
-        description:
+        code:error.status || 500,
+        description: error.message ||
           'Apologies, but we were unable to locate any matching user records.',
       },
     })
@@ -80,32 +56,23 @@ const getAllUsers = async (req: Request, res: Response) => {
 const getSpecificUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params
-    const result = await userServices.getSpecificUserFromDB(userId)
+    const result = await userServices.getSpecificUserFromDB(Number(userId))
 
-    if (!result) {
-      res.status(500).json({
-        success: false,
-        message: 'An error occurred while processing your request.',
-        error: {
-          code: 500,
-          description:
-            'We regret to inform you that we could not find any user matching the provided criteria.',
-        },
-      })
-    }
 
     res.status(200).json({
       success: true,
-      message: 'Get specific user successfully',
+      message: 'User fetched successfully!',
       data: result,
     })
   } catch (error: any) {
-    res.status(500).json({
+    res.status(error.status || 500).json({
       success: false,
-      message: 'An error occurred while processing your request.',
+      message:
+        error.message || 'An error occurred while processing your request.',
       error: {
-        code: 500,
+        code: error.status || 500,
         description:
+          error.message ||
           'We regret to inform you that we could not find any user matching the provided criteria.',
       },
     })
@@ -117,20 +84,22 @@ const getSpecificUser = async (req: Request, res: Response) => {
 const deleteSpecificUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params
-    const result = await userServices.deleteSpecificUserFromDB(userId)
+    const result = await userServices.deleteSpecificUserFromDB(Number(userId))
 
     res.status(200).json({
       success: true,
-      message: 'Delete specific user successfully',
+      message: 'User deleted successfully!',
       data: result,
     })
-  } catch (error) {
-    res.status(500).json({
+  } catch (error:any) {
+    res.status(error.status || 500).json({
       success: false,
-      message: 'An error occurred while processing your request.',
+      message:
+        error.message || 'An error occurred while processing your request.',
       error: {
-        code: 500,
+        code: error.status || 500,
         description:
+          error.message ||
           'We apologize, but we are currently unable to delete the specified user. Please try again later.',
       },
     })
@@ -143,19 +112,24 @@ const updateSpecificUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params
     const data = req.body
-    const result = await userServices.updateSpecificUserFromDB(userId, data)
+    const result = await userServices.updateSpecificUserFromDB(
+      Number(userId),
+      data,
+    )
     res.status(200).json({
       success: true,
-      message: 'Update specific user successfully',
+      message: 'User updated successfully!',
       data: result,
     })
-  } catch (error) {
-    res.status(500).json({
+  } catch (error:any) {
+    res.status(error.status || 500).json({
       success: false,
-      message: 'An error occurred while processing your request.',
+      message:
+        error.message || 'An error occurred while processing your request.',
       error: {
-        code: 500,
+        code: error.status || 500,
         description:
+          error.message ||
           'We apologize, but we are currently unable to update the user. Please try again later.',
       },
     })
@@ -168,40 +142,40 @@ const createSpecificUserOrders = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params
     const data = req.body
-    const isUserExit = await UserModel.isUserExits(Number(userId))
-    if (!isUserExit) {
-      res.status(404).json({
-        success: false,
-        message: 'User not found',
-        error: {
-          code: 404,
-          description: 'user not found',
-        },
-      })
-    }
-    const result = await userServices.createUserOrdersIntoDB(userId, data)
+
+    const result = await userServices.createUserOrdersIntoDB(
+      Number(userId),
+      data,
+    )
     res.status(200).json({
       success: true,
-      message: 'create specific user orders successfully',
+      message: 'Order created successfully!',
       data: result,
     })
-  } catch (error) {
-    res.status(500).json({
+  } catch (error:any) {
+    res.status(error.status || 500).json({
       success: false,
-      message: 'An error occurred while processing your request.',
+      message:
+        error.message || 'An error occurred while processing your request.',
       error: {
-        code: 500,
+        code:error.status || 500,
         description:
+          error.message ||
           'We regret to inform you that we are currently unable to retrieve orders for the specified user.',
       },
     })
   }
 }
 
+
+/* Get all orders data of specific user   */
+
 const getSpecificUserOrders = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params
-    const result = await userServices.getSpecificUserOrdersFromDB(userId)
+    const result = await userServices.getSpecificUserOrdersFromDB(
+      Number(userId),
+    )
 
 
     res.status(200).json({
@@ -210,7 +184,6 @@ const getSpecificUserOrders = async (req: Request, res: Response) => {
       data: result,
     })
   } catch (error: any) {
-    console.log(error.status)
     res.status(error.status || 500).json({
       success: false,
       message: error.message || 'Something went wrong',
@@ -222,22 +195,26 @@ const getSpecificUserOrders = async (req: Request, res: Response) => {
   }
 }
 
+
+/* Get total prices of all orders of specific user  */
+
+
 const getTotalOrdersValues = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params
-    const result = await userServices.getTotalOrdersValuesFromDB(userId)
+    const result = await userServices.getTotalOrdersValuesFromDB(Number(userId))
     res.status(200).json({
       success: true,
       message: 'Total price calculated successfully!',
       data: result,
     })
   } catch (error: any) {
-    res.status(500).json({
+    res.status(error.status || 500).json({
       success: false,
-      message: 'Something went wrong',
+      message: error.message || 'Something went wrong',
       error: {
-        code: 500,
-        description: 'Unfortunately,cannot get orders data',
+        code: error.status || 500,
+        description: error.message || 'Unfortunately,cannot get orders data',
         error: error.message,
       },
     })
