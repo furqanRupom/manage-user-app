@@ -57,7 +57,7 @@ const updateSpecificUserFromDB = async (userId: number, data: any) => {
   if (!isUserExit) {
     throw { message: 'user not found', status: 404 }
   }
-  const result = await UserModel.findOneAndUpdate({ userId }, { $set: data })
+  const result = await UserModel.findOneAndUpdate({userId},{$set:data},{new:true,runValidators:true})
   return result
 }
 
@@ -68,15 +68,13 @@ const createUserOrdersIntoDB = async (userId: number, data: IUserOrders) => {
   if (!isUserExit) {
     throw { message: 'user not found', status: 404 }
   }
-  // const user = await UserModel.findOne({ userId })
-  // if (!user?.orders) user?.set('orders', [])
-  // if (user) user?.orders?.push(data)
-  // await user?.save()
-  // return null
+  await UserModel.updateOne(
+    { userId },
+    { $push: { orders: data } },
+    { upsert: true },
+  )
 
-    await UserModel.updateOne({userId},{$push:{orders:data}},{upsert:true})
-
-   return null;
+  return null
 }
 
 /* get specific user orders data  */
@@ -91,7 +89,7 @@ const getSpecificUserOrdersFromDB = async (userId: number) => {
     _id: 0,
   })
 
-  if(!result?.orders){
+  if (!result?.orders) {
     throw { error: 404, message: 'user orders not found' }
   }
   return result
