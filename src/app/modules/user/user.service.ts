@@ -57,7 +57,11 @@ const updateSpecificUserFromDB = async (userId: number, data: any) => {
   if (!isUserExit) {
     throw { message: 'user not found', status: 404 }
   }
-  const result = await UserModel.findOneAndUpdate({userId},{$set:data},{new:true,runValidators:true})
+  const result = await UserModel.findOneAndUpdate(
+    { userId },
+    { $set: data },
+    { new: true, runValidators: true },
+  )
   return result
 }
 
@@ -107,10 +111,9 @@ const getTotalOrdersValuesFromDB = async (userId: number) => {
     { $match: { userId } },
 
     { $unwind: '$orders' },
-
     {
       $group: {
-        _id: '$orders',
+        _id: null,
         total: {
           $sum: { $multiply: ['$orders.price', '$orders.quantity'] },
         },
@@ -118,9 +121,6 @@ const getTotalOrdersValuesFromDB = async (userId: number) => {
     },
     { $project: { _id: 0, total: 1 } },
   ])
-  if (result.length == 0) {
-    throw { error: 404, message: 'user orders not found' }
-  }
 
   return { totalPrice: result[0].total }
 }
