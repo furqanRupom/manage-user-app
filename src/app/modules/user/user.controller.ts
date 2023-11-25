@@ -117,10 +117,13 @@ const deleteSpecificUser = async (req: Request, res: Response) => {
 const updateSpecificUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params
+
     const data = req.body
+     const parseUserData = UserSchemaValidation.partial().parse(data)
+
     const result = await userServices.updateSpecificUserFromDB(
       Number(userId),
-      data,
+      parseUserData,
     )
     res.status(200).json({
       success: true,
@@ -129,16 +132,21 @@ const updateSpecificUser = async (req: Request, res: Response) => {
     })
   } catch (error:any) {
     res.status(error.status || 500).json({
+
       success: false,
       message:
-        error.message || 'An error occurred while processing your request.',
+        error.message || error.issues
+          ? `${error.issues[0].path[0]} : ${error.issues[0].message} `
+          : 'An error occurred while processing your request.',
       error: {
         code: error.status || 500,
         description:
-          error.message ||
-          'We apologize, but we are currently unable to update the user. Please try again later.',
+          error.message || error.issues
+            ? `${error.issues[0].path[0]} : ${error.issues[0].message} `
+            : 'We apologize, but we are currently unable to update the user. Please try again later.',
       },
     })
+
   }
 }
 

@@ -68,11 +68,15 @@ const createUserOrdersIntoDB = async (userId: number, data: IUserOrders) => {
   if (!isUserExit) {
     throw { message: 'user not found', status: 404 }
   }
-  const user = await UserModel.findOne({ userId })
-  if (!user?.orders) user?.set('orders', [])
-  if (user) user?.orders?.push(data)
-  await user?.save()
-  return null
+  // const user = await UserModel.findOne({ userId })
+  // if (!user?.orders) user?.set('orders', [])
+  // if (user) user?.orders?.push(data)
+  // await user?.save()
+  // return null
+
+    await UserModel.updateOne({userId},{$push:{orders:data}},{upsert:true})
+
+   return null;
 }
 
 /* get specific user orders data  */
@@ -86,6 +90,10 @@ const getSpecificUserOrdersFromDB = async (userId: number) => {
     orders: 1,
     _id: 0,
   })
+
+  if(!result?.orders){
+    throw { error: 404, message: 'user orders not found' }
+  }
   return result
 }
 
@@ -94,14 +102,29 @@ const getSpecificUserOrdersFromDB = async (userId: number) => {
 const getTotalOrdersValuesFromDB = async (userId: number) => {
   const isUserExit = await UserModel.isUserExits(userId)
   if (!isUserExit) {
-    return { success: false, status: 404, message: 'cannot find the user' }
+    throw { status: 404, message: 'cannot find the user' }
   }
-  const result = await UserModel.findOne(
-    { userId },
-    { _id: 0, totalPrice: { $sum: '$orders.price' } },
-  )
 
-  return result
+  const result = await UserModel.aggregate([
+    { $match: { userId } },
+
+    { $unwind: '$orders' },
+
+    {
+      $group: {
+        _id: '$orders',
+        total: {
+          $sum: { $multiply: ['$orders.price', '$orders.quantity'] },
+        },
+      },
+    },
+    { $project: { _id: 0, total: 1 } },
+  ])
+  if (result.length == 0) {
+    throw { error: 404, message: 'user orders not found' }
+  }
+
+  return { totalPrice: result[0].total }
 }
 
 export const userServices = {
