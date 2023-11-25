@@ -12,7 +12,7 @@ const UserAddressSchemaValidation = z.object({
   country: z.string(),
 })
 
-const UserOrdersSchemaValidation = z.object({
+export const UserOrdersSchemaValidation = z.object({
   productName: z.string(),
   price: z.number(),
   quantity: z.number(),

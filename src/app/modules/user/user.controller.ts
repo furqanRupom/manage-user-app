@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express'
 import { userServices } from './user.service'
-import UserSchemaValidation from './user.validation'
-
+import UserSchemaValidation, {
+  UserOrdersSchemaValidation,
+} from './user.validation'
 
 /*  create user controller    */
 
@@ -21,14 +22,16 @@ const createUser = async (req: Request, res: Response) => {
       success: false,
       message:
         error.message || error.issues
-          ? `${error.issues[0].path[0]} : ${error.issues[0].message} `
-          : 'Something went wrong',
+          ? error.issues.map((e: any) => `${e.path} : ${e.message}`).join(' , ')
+          : 'Unfortunately, user creation failed.',
       error: {
         code: error.status || 500,
         description:
-          error.message || error.issues ?
-            `${error.issues[0].path[0]} : ${error.issues[0].message} `
-            : 'Unfortunately, user creation failed',
+          error.message || error.issues
+            ? error.issues
+                .map((e: any) => `${e.path} : ${e.message}`)
+                .join(' , ')
+            : 'Unfortunately, user creation failed.',
       },
     })
   }
@@ -47,10 +50,13 @@ const getAllUsers = async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(error.status || 500).json({
       success: false,
-      message: error.message || 'We encountered an issue while processing your request.',
+      message:
+        error.message ||
+        'We encountered an issue while processing your request.',
       error: {
-        code:error.status || 500,
-        description: error.message ||
+        code: error.status || 500,
+        description:
+          error.message ||
           'Apologies, but we were unable to locate any matching user records.',
       },
     })
@@ -63,7 +69,6 @@ const getSpecificUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params
     const result = await userServices.getSpecificUserFromDB(Number(userId))
-
 
     res.status(200).json({
       success: true,
@@ -97,7 +102,7 @@ const deleteSpecificUser = async (req: Request, res: Response) => {
       message: 'User deleted successfully!',
       data: result,
     })
-  } catch (error:any) {
+  } catch (error: any) {
     res.status(error.status || 500).json({
       success: false,
       message:
@@ -119,7 +124,7 @@ const updateSpecificUser = async (req: Request, res: Response) => {
     const { userId } = req.params
 
     const data = req.body
-     const parseUserData = UserSchemaValidation.partial().parse(data)
+    const parseUserData = UserSchemaValidation.partial().parse(data)
 
     const result = await userServices.updateSpecificUserFromDB(
       Number(userId),
@@ -130,23 +135,23 @@ const updateSpecificUser = async (req: Request, res: Response) => {
       message: 'User updated successfully!',
       data: result,
     })
-  } catch (error:any) {
+  } catch (error: any) {
     res.status(error.status || 500).json({
-
       success: false,
       message:
         error.message || error.issues
-          ? `${error.issues[0].path[0]} : ${error.issues[0].message} `
+          ? error.issues.map((e: any) => `${e.path} : ${e.message}`).join(' , ')
           : 'An error occurred while processing your request.',
       error: {
         code: error.status || 500,
         description:
           error.message || error.issues
-            ? `${error.issues[0].path[0]} : ${error.issues[0].message} `
-            : 'We apologize, but we are currently unable to update the user. Please try again later.',
+            ? error.issues
+                .map((e: any) => `${e.path} : ${e.message}`)
+                .join(' , ')
+            : 'An error occurred while processing your request.',
       },
     })
-
   }
 }
 
@@ -155,7 +160,7 @@ const updateSpecificUser = async (req: Request, res: Response) => {
 const createSpecificUserOrders = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params
-    const data = req.body
+    const data = UserOrdersSchemaValidation.parse(req.body)
 
     const result = await userServices.createUserOrdersIntoDB(
       Number(userId),
@@ -166,21 +171,25 @@ const createSpecificUserOrders = async (req: Request, res: Response) => {
       message: 'Order created successfully!',
       data: result,
     })
-  } catch (error:any) {
+  } catch (error: any) {
     res.status(error.status || 500).json({
       success: false,
       message:
-        error.message || 'An error occurred while processing your request.',
+        error.message || error.issues
+          ? error.issues.map((e: any) => `${e.path} : ${e.message}`).join(' , ')
+          : 'An error occurred while processing your request.',
       error: {
-        code:error.status || 500,
+        code: error.status || 500,
         description:
-          error.message ||
-          'We regret to inform you that we are currently unable to retrieve orders for the specified user.',
+          error.message || error.issues
+            ? error.issues
+                .map((e: any) => `${e.path} : ${e.message}`)
+                .join(' , ')
+            : 'An error occurred while processing your request.',
       },
     })
   }
 }
-
 
 /* Get all orders data of specific user   */
 
@@ -190,7 +199,6 @@ const getSpecificUserOrders = async (req: Request, res: Response) => {
     const result = await userServices.getSpecificUserOrdersFromDB(
       Number(userId),
     )
-
 
     res.status(200).json({
       success: true,
@@ -209,9 +217,7 @@ const getSpecificUserOrders = async (req: Request, res: Response) => {
   }
 }
 
-
 /* Get total prices of all orders of specific user  */
-
 
 const getTotalOrdersValues = async (req: Request, res: Response) => {
   try {
